@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.set('logger', logger);
-app.set('config', configuration);
+app.set('configuration', configuration);
 
 //app.use(morgan('dev'));
 app.use(morgan('dev', {
@@ -33,6 +33,8 @@ app.use(morgan('dev', {
   }, stream: process.stdout
 }));
 
+
+app.use(logger.connectLogger(logger.getLogger('http'), { level: 'auto' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

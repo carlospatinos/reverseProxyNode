@@ -29,8 +29,10 @@ class ConfigManager{
 
 }
 
-let configManager = new ConfigManager('./config/gw-app-config.yml');
+let configManager = new ConfigManager(__dirname + '/config/gw-app-config.yml');
 let configuration = configManager.getConfig();
+configuration.log.configFile = __dirname + "/" + configuration.log.configFile;
+console.log("Loading log4js config from: " + configuration.log.configFile);
 
 module.exports = configuration;
 

@@ -2,7 +2,7 @@ app:
   port: 8100
 #logs
 log:
-  configFile: ./resources/config/log4js.json
+  configFile: config/log4js.json
 #reverse proxy
 reverseProxy:
   app:

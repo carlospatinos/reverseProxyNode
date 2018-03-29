@@ -6,7 +6,6 @@ let chaiHttp = require('chai-http');
 let should = chai.should();
 let app = require('../server');
 
-
 chai.use(chaiHttp);
 
 //Our parent block
@@ -23,6 +22,7 @@ describe('API', () => {
             chai.request(app)
                 .get('/api')
                 .end((err, res) => {
+                    console.log("res.body" + res.body);
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                 done();
