@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var appRouter = require('./routes/app');
 var healthCheckRouter = require('./routes/healthcheck');
+var cdn = require('./routes/cdn');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/app', appRouter);
 app.use('/health', healthCheckRouter);
+app.use('/cdn', cdn);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
