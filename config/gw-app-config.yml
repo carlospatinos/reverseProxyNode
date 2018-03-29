@@ -1,0 +1,13 @@
+app:
+  port: 8100
+#logs
+log:
+  configFile: ./resources/config/log4js.json
+#reverse proxy
+reverseProxy:
+  app:
+    url: http://localhost:8200
+    proxyTimeout: 1000
+  api:
+    url: http://localhost:8200
+    proxyTimeout: 1000
