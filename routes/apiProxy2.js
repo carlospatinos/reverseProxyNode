@@ -1,4 +1,6 @@
-var proxy = require('http-proxy-middleware');
+var proxyMiddleware = require('http-proxy-middleware');
+var jwt = require('jsonwebtoken');
+var configuration = require('../configuration');
 
 function logProvider(provider) {
   var logger = new (require('winston').Logger)();
@@ -15,29 +17,30 @@ function logProvider(provider) {
 
 function onProxyReq(proxyReq, req, res) {
   // add custom header to request
-  proxyReq.setHeader('x-added', 'foobar');
-  console.log("proxy request.......");
+  var tokenWithDuration = jwt.sign({ user: 'usuario', iat: Math.floor(Date.now() / 1000) - 30 }, 'my secret');
+  proxyReq.setHeader('x-added', tokenWithDuration);
+  res.setHeader('x-added', tokenWithDuration);
+  console.log("generating jwt token: " + tokenWithDuration);
   // or log the req
 }
 
 var options = {
-  target: 'https://en.wikipedia.org', // target host
+  target: String(configuration.reverseProxy.api.url), // target host
+  logLevel: "debug",
   logProvider: logProvider,
   changeOrigin: true,  
   onProxyReq: onProxyReq,             // needed for virtual hosted sites
+  //proxyTimeout: configuration.reverseProxy.api.proxyTimeout,
   ws: true,                         // proxy websockets
   pathRewrite: {
-      '^/api/old-path' : '/api/new-path',     // rewrite path
       '^/api' : ''           // remove base path
   },
   router: {
       // when request.headers.host == 'dev.localhost:3000',
-      // override target 'http://www.example.org' to 'http://localhost:8000'
       'dev.localhost:3000' : 'http://localhost:8000'
   }
 };
 
+var proxy = proxyMiddleware(options);
 
-var proxy2 = proxy(options);
-
-module.exports = proxy2;
+module.exports = proxy;

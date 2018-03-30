@@ -6,8 +6,8 @@ log:
 #reverse proxy
 reverseProxy:
   app:
-    url: http://localhost:8200
+    url: 'https://en.wikipedia.org/'
     proxyTimeout: 1000
   api:
-    url: https://www.wikipedia.org/
+    url: 'https://en.wikipedia.org'
     proxyTimeout: 1000

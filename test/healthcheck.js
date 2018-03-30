@@ -25,8 +25,8 @@ describe('APP', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('redis');
-                    res.body.should.have.property('node');
+                    res.body.should.have.property('statusConnectionRedis');
+                    res.body.should.have.property('statusConnectionBack');
                 done();
                 });
         });

@@ -45,12 +45,7 @@ app.use(nocache())
 app.use('/', indexRouter);
 //app.use('/api', apiRoute);
 
-function test(req, res, next){
-  console.log("------ colled" + new Date());
-  next();
-}
-
-app.use('/api', test, apiProxy);
+app.use('/api', apiProxy);
 
 app.use('/app', appRouter);
 app.use('/health', healthCheckRouter);
