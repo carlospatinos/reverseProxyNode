@@ -12,3 +12,18 @@ reverseProxy:
     url: 'https://en.wikipedia.org/'
   api:
     url: 'http://ftp.riken.jp/Linux/'
+redis:
+  ip: 127.0.0.1
+  port: 1000
+backend:
+  properties: 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-03'
+  applications: 'https://11jsonplaceholder.typicode.com/users'
+  audits: 'https://jsonplaceholder.typicode.com/users'
+  labels: 'https://jsonplaceholder.typicode.com/users'
+  catalogs: 'https://jsonplaceholder.typicode.com/users'
+  pushs: 'https://jsonplaceholder.typicode.com/users'
+  clients: 'https://jsonplaceholder.typicode.com/users'
+  accounts: 'https://jsonplaceholder.typicode.com/users'
+  cards: 'https://jsonplaceholder.typicode.com/users'
+  balances: 'https://jsonplaceholder.typicode.com/users'
+
