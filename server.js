@@ -5,9 +5,10 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var logFramework = require('./logFramework');
 var configuration = require('./configuration');
-
+var nocache = require('nocache')
 var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/api');
+//var apiRoute = require('./routes/apiRoute');
+var apiProxy =  require('./routes/apiProxy2');
 var appRouter = require('./routes/app');
 var healthCheckRouter = require('./routes/healthcheck');
 var cdn = require('./routes/cdn');
@@ -39,9 +40,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(nocache())
 
 app.use('/', indexRouter);
-app.use('/api', apiRouter);
+//app.use('/api', apiRoute);
+
+function test(req, res, next){
+  console.log("------ colled" + new Date());
+  next();
+}
+
+app.use('/api', test, apiProxy);
+
 app.use('/app', appRouter);
 app.use('/health', healthCheckRouter);
 app.use('/cdn', cdn);
