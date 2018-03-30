@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
-var logger = require('./logger');
+var logFramework = require('./logFramework');
 var configuration = require('./configuration');
 
 var indexRouter = require('./routes/index');
@@ -17,7 +17,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-app.set('logger', logger);
+app.set('logFramework', logFramework);
 app.set('configuration', configuration);
 
 //app.use(morgan('dev'));
@@ -34,7 +34,7 @@ app.use(morgan('dev', {
 }));
 
 
-app.use(logger.connectLogger(logger.getLogger('http'), { level: 'auto' }));
+app.use(logFramework.connectLogger(logFramework.getLogger('http'), { level: 'auto' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

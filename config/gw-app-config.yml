@@ -9,5 +9,5 @@ reverseProxy:
     url: http://localhost:8200
     proxyTimeout: 1000
   api:
-    url: http://localhost:8200
+    url: https://www.wikipedia.org/
     proxyTimeout: 1000

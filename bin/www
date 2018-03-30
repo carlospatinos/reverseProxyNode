@@ -5,7 +5,6 @@
  */
 
 var app = require('../server');
-var logger = require('../logger');
 var debug = require('debug')('reverseproxynode:server');
 var http = require('http');
 var configuration = require('../configuration');
@@ -26,13 +25,6 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-//server.listen(port);
-// app.listen(port, (logger = app.get('logger')) => {
-//   logger.info("Starting app on port: %d", app.get('port'));
-//   logger.info('Using this log configuration: %s', configuration.log.configFile);
-// });
-
 app.listen(port, () => {
   console.log("Starting app on port: %d", app.get('port'));
   console.log('Using this log configuration: %s', configuration.log.configFile);
