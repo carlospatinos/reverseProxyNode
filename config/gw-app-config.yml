@@ -5,9 +5,10 @@ log:
   configFile: config/log4js.json
 #reverse proxy
 reverseProxy:
-  app:
+  default:
     url: 'https://en.wikipedia.org/'
     proxyTimeout: 1000
+  app:
+    url: 'https://en.wikipedia.org/'
   api:
-    url: 'https://en.wikipedia.org'
-    proxyTimeout: 1000
+    url: 'http://ftp.riken.jp/Linux/'

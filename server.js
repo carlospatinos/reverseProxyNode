@@ -7,9 +7,7 @@ var logFramework = require('./logFramework');
 var configuration = require('./configuration');
 var nocache = require('nocache')
 var indexRouter = require('./routes/index');
-//var apiRoute = require('./routes/apiRoute');
-var apiProxy =  require('./routes/apiProxy2');
-var appRouter = require('./routes/app');
+var gatewayProxy =  require('./routes/gatewayProxy');
 var healthCheckRouter = require('./routes/healthcheck');
 var cdn = require('./routes/cdn');
 
@@ -43,13 +41,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(nocache())
 
 app.use('/', indexRouter);
-//app.use('/api', apiRoute);
-
-app.use('/api', apiProxy);
-
-app.use('/app', appRouter);
 app.use('/health', healthCheckRouter);
 app.use('/cdn', cdn);
+
+app.use('/api', gatewayProxy);
+app.use('/app', gatewayProxy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
