@@ -7,14 +7,13 @@ log:
 reverseProxy:
   default:
     url: 'https://en.wikipedia.org/'
-    proxyTimeout: 6379
+    proxyTimeout: 1000
   app:
     url: 'https://en.wikipedia.org/'
   api:
     url: 'http://ftp.riken.jp/Linux/'
 redis:
-  ip: 127.0.0.1
-  port: 1000
+  url: 'redis://localhost:6379'
 backend:
   properties: 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-03'
   applications: 'https://11jsonplaceholder.typicode.com/users'

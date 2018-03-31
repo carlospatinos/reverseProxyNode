@@ -5,12 +5,13 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
 let app = require('../server');
+var redisClient = require('../modules/redisModule');
 
 
 chai.use(chaiHttp);
 
 //Our parent block
-describe('APP', () => {
+describe('Health', () => {
     beforeEach((done) => { //Before each test we empty the database
         done();   
     });
@@ -27,6 +28,7 @@ describe('APP', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('statusConnectionRedis');
                     res.body.should.have.property('statusConnectionBack');
+                    redisClient.getClient().quit();
                 done();
                 });
         });

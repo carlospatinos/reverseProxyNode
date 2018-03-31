@@ -1,6 +1,7 @@
 var redis = require('redis');
 var nodeCleanup = require('node-cleanup');
 var logFramework = require('../logFramework');
+var configuration = require('../configuration');
 var logger = logFramework.getLogger("default");
 let client = null;
  
@@ -13,10 +14,10 @@ nodeCleanup(function (exitCode, signal) {
 });
 
 const options = {
-    url: 'redis://localhost:6379',
+    url: configuration.redis.url,
     retry_strategy: (options) => {
         client = null;
-        return new Error("Redis client connection dropped.");
+        return new Error("No se pudo establecer conexion con redis.");
     }
 };
 
