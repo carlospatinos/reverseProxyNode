@@ -37,5 +37,3 @@ module.exports = {
         return client;
     }
 };
-
-//module.exports = client;

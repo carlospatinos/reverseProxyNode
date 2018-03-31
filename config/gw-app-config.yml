@@ -1,9 +1,9 @@
 app:
   port: 8100
-#logs
+  secretKey: 'mySuperSecret'
+  tokenDuration: 20000
 log:
   configFile: config/log4js.json
-#reverse proxy
 reverseProxy:
   default:
     url: 'https://en.wikipedia.org/'

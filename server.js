@@ -3,20 +3,33 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
-var logFramework = require('./logFramework');
+var nocache = require('nocache');
+
+var app = express();
+
+var Container = require('plus.container');
+var container = new Container();
+
 var configuration = require('./configuration');
-var nocache = require('nocache')
+var securityRouter = require('./routes/security');
+container.register('configuration', configuration);
+//container.register('configuration', configuration, [container]);
+container.register('securityRouter', securityRouter, [configuration]);
+
+var logFramework = require('./logFramework');
+
 var indexRouter = require('./routes/index');
 var gatewayProxy =  require('./routes/gatewayProxy');
 var healthCheckRouter = require('./routes/healthcheck');
 
-var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.set('logFramework', logFramework);
-app.set('configuration', configuration);
+//app.set('configuration', configuration);
 
 //app.use(morgan('dev'));
 app.use(morgan('dev', {
@@ -42,6 +55,8 @@ app.use(nocache())
 
 app.use('/', indexRouter);
 app.use('/health', healthCheckRouter);
+app.use('/security', securityRouter);
+
 
 app.use('/api', gatewayProxy);
 app.use('/app', gatewayProxy);
