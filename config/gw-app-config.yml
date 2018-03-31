@@ -7,7 +7,7 @@ log:
 reverseProxy:
   default:
     url: 'https://en.wikipedia.org/'
-    proxyTimeout: 1000
+    proxyTimeout: 6379
   app:
     url: 'https://en.wikipedia.org/'
   api:
