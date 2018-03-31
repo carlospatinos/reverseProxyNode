@@ -5,9 +5,8 @@ var logFramework = require('../logFramework');
 var configuration = require('../configuration');
 var redisClient = require('../modules/redisModule');
 
-var logger = logFramework.getLogger("http");
+var logger = logFramework.getLogger("default");
 var healthResponse = {};
-// TODO ping redis
 healthResponse['statusConnectionRedis']=false;
 
 function useNull() {
@@ -35,7 +34,7 @@ function isRedisRunning(error, result){
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  redisClient.ping(function(error, redisResponse) {
+  redisClient.getClient().ping(function(error, redisResponse) {
     healthResponse['statusConnectionRedis']=isRedisRunning(error, redisResponse);
   });
 
@@ -69,7 +68,7 @@ router.get('/', function(req, res, next) {
     };
     healthResponse['statusConnectionBack']=(data);
 
-    console.log(healthResponse); 
+    logger.debug(healthResponse); 
     res.json(healthResponse);   
   }));    
 });
