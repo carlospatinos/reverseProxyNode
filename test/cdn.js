@@ -21,7 +21,7 @@ describe('CDN', () => {
     describe('Basic route', () => {
         it('it should GET response', (done) => {
             chai.request(app)
-                .get('/cdn')
+                .get('/cdn/index.html')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');

@@ -9,7 +9,6 @@ var nocache = require('nocache')
 var indexRouter = require('./routes/index');
 var gatewayProxy =  require('./routes/gatewayProxy');
 var healthCheckRouter = require('./routes/healthcheck');
-var cdn = require('./routes/cdn');
 
 var app = express();
 
@@ -38,11 +37,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
 app.use(nocache())
 
 app.use('/', indexRouter);
 app.use('/health', healthCheckRouter);
-app.use('/cdn', cdn);
 
 app.use('/api', gatewayProxy);
 app.use('/app', gatewayProxy);
