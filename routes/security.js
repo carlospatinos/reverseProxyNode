@@ -12,8 +12,8 @@ module.exports = function(app){
     /* GET home page. */
     router.post('/', function(req, res, next) {
         // TODO: validar la information contra redis
-        user = req.get('user');
-        pass = req.get('pass');
+        var user = req.get('user');
+        var pass = req.get('pass');
         logger.debug('Generando token para usuario: ' + user);
         var tokenWithDuration = jwt.sign({ user: user }, configuration.app.secretKey, { expiresIn: parseInt(configuration.app.tokenDuration) });
         res.json({token: tokenWithDuration});

@@ -20,16 +20,18 @@ const securityMiddleware = function (req, res, next) {
     // reply is null when the key is missing
     if(err){
       res.redirect('/');
+      return;
     } else {
       var decodedToken = '';
       try{
         decodedToken = jwt.verify(tokenProvided, configuration.app.secretKey);
         logger.debug("token verificado: %s", decodedToken);
-        res.json({token: decodedToken});
+        res.header('token',decodedToken);
         next();
       } catch(err) {
           logger.warn(err);
           res.redirect('/');
+          return;
       }
       
     }
