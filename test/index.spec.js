@@ -10,7 +10,7 @@ let app = require('../server');
 chai.use(chaiHttp);
 
 //Our parent block
-describe('Root', () => {
+describe('Server', () => {
     beforeEach((done) => { //Before each test we empty the database
         done();   
     });
@@ -18,15 +18,13 @@ describe('Root', () => {
     /*
     * Test the /GET route
     */
-    describe('Basic route', () => {
-        it('it should GET response', (done) => {
-            chai.request(app)
-                .get('/')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                done();
-                });
-        });
-    });
+    it('should provide a message on / GET', (done) => {
+        chai.request(app)
+            .get('/')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+            done();
+            });
+    }); 
 });

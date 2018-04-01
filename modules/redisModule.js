@@ -1,13 +1,16 @@
-var redis = require('redis');
+
 var nodeCleanup = require('node-cleanup');
 var logFramework = require('../logFramework');
 var configuration = require('../configuration');
 var logger = logFramework.getLogger("default");
 let client = null;
- 
+
+var redis = require('redis');
+
+
 nodeCleanup(function (exitCode, signal) {
     // release resources here before node exits 
-    console.log("Terminando conexion con redis");
+    logger.info("Terminando conexion con redis");
     if(client != null) {
         client.quit();
     }
@@ -37,9 +40,3 @@ module.exports = {
         return client;
     }
 };
-
-
-// module.exports = function(_redis) {
-//     redis = _redis;
-//     console.log("Redis changes");
-// }

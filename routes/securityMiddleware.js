@@ -11,9 +11,10 @@ const securityMiddleware = function (req, res, next) {
   if(tokenProvided == null || tokenProvided == ""){
     logger.warn('Token es nullo o vacio');
     res.redirect('/');
+    return;
   }
   // redisClient.getClient().set('SECURITY_' + tokenProvided, 'valid', function(err, reply) {
-  //   console.log("persistido");
+  //   logger.debug("persistido");
   // });
   redisClient.getClient().get('SECURITY_' + tokenProvided, function(err, reply) {
     // reply is null when the key is missing

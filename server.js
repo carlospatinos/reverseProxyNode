@@ -6,22 +6,25 @@ var morgan = require('morgan');
 var nocache = require('nocache');
 var app = express();
 
-
 var configuration = require('./configuration');
-var securityRouter = require('./routes/security');
+app.set('configuration', configuration);
 var logFramework = require('./logFramework');
+app.set('logFramework', logFramework);
 var redisClient = require('./modules/redisModule');
-var indexRouter = require('./routes/index');
-var gatewayProxy =  require('./routes/gatewayProxy');
-var healthCheckRouter = require('./routes/healthcheck');
+app.set('redisClient', redisClient);
+var moduleIndex = require('./routes/index')(app);
+
+var moduleSecurity = require('./routes/security')(app);
+
+//var indexRouter = moduleIndex.router;
+var gatewayProxy =  require('./routes/gatewayProxy')(app);
+var healthCheckRouter = require('./routes/healthcheck')(app);
 var securityMiddleware = require('./routes/securityMiddleware');
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-//app.set('logFramework', logFramework);
-//app.set('configuration', configuration);
 
 //app.use(morgan('dev'));
 app.use(morgan('dev', {
@@ -45,9 +48,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(nocache())
 
-app.use('/', indexRouter);
+app.use('/', moduleIndex);
+app.use('/security', moduleSecurity);
 app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
-app.use('/security', securityRouter);
+
 app.use('/health', healthCheckRouter);
 
 app.use('/api', securityMiddleware, gatewayProxy);
