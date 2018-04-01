@@ -66,7 +66,7 @@ router.get('/', function(req, res, next) {
       "accounts": isServiceRunning(healthServiceAccounts),
       "cards": isServiceRunning(healthServiceCards),
       "balances": isServiceRunning(healthServiceBalances)
-    };
+    };  
     healthResponse['statusConnectionBack']=(data);
 
     logger.debug(healthResponse); 

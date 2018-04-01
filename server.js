@@ -4,18 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var nocache = require('nocache');
-
 var app = express();
 
 
 var configuration = require('./configuration');
 var securityRouter = require('./routes/security');
 var logFramework = require('./logFramework');
+var redisClient = require('./modules/redisModule');
 var indexRouter = require('./routes/index');
 var gatewayProxy =  require('./routes/gatewayProxy');
 var healthCheckRouter = require('./routes/healthcheck');
-
-
+var securityMiddleware = require('./routes/securityMiddleware');
 
 
 // view engine setup
@@ -51,8 +50,8 @@ app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
 app.use('/security', securityRouter);
 app.use('/health', healthCheckRouter);
 
-app.use('/api', gatewayProxy);
-app.use('/app', gatewayProxy);
+app.use('/api', securityMiddleware, gatewayProxy);
+app.use('/app', securityMiddleware, gatewayProxy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "LOG_LEVEL=debug  PORT=8080 nodemon ./bin/www",
-    "test": "mocha --timeout 1000",
-    "q start": "node ./bin/www"
+    "start": "LOG_LEVEL=debug PORT=8080 nodemon ./bin/www",
+    "test": "mocha --inspect ",
+    "debug": "LOG_LEVEL=debug PORT=8080 nodemon --inspect ./bin/www",
+    "extra": "node ./bin/www --timeout 1000"
   },
   "dependencies": {
     "axios": "^0.18.0",
