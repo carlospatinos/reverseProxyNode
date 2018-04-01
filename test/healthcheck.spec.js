@@ -4,6 +4,8 @@ process.env.NODE_ENV = 'test';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
+
+// var redis = require("redis-mock");
 let app = require('../server');
 var redisClient = require('../modules/redisModule');
 

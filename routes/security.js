@@ -6,7 +6,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
-    // TODO validar la information contra redis
+    // TODO: validar la information contra redis
     user = req.get('user');
     pass = req.get('pass');
     console.log('generando password para: ' + user);

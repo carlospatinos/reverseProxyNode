@@ -34,6 +34,7 @@ function isRedisRunning(error, result){
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  // TODO: validar el jwt token
   redisClient.getClient().ping(function(error, redisResponse) {
     healthResponse['statusConnectionRedis']=isRedisRunning(error, redisResponse);
   });

@@ -7,17 +7,10 @@ var nocache = require('nocache');
 
 var app = express();
 
-var Container = require('plus.container');
-var container = new Container();
 
 var configuration = require('./configuration');
 var securityRouter = require('./routes/security');
-container.register('configuration', configuration);
-//container.register('configuration', configuration, [container]);
-container.register('securityRouter', securityRouter, [configuration]);
-
 var logFramework = require('./logFramework');
-
 var indexRouter = require('./routes/index');
 var gatewayProxy =  require('./routes/gatewayProxy');
 var healthCheckRouter = require('./routes/healthcheck');
@@ -50,13 +43,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
+
 app.use(nocache())
 
 app.use('/', indexRouter);
-app.use('/health', healthCheckRouter);
+app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
 app.use('/security', securityRouter);
-
+app.use('/health', healthCheckRouter);
 
 app.use('/api', gatewayProxy);
 app.use('/app', gatewayProxy);
