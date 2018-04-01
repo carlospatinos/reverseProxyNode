@@ -2,6 +2,9 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 
 var configuration = require('../configuration');
+var logFramework = require('../logFramework');
+var logger = logFramework.getLogger("default");
+
 var router = express.Router();
 
 /* GET home page. */
@@ -9,7 +12,7 @@ router.post('/', function(req, res, next) {
     // TODO: validar la information contra redis
     user = req.get('user');
     pass = req.get('pass');
-    console.log('generando password para: ' + user);
+    logger.debug('Generando token para usuario: ' + user);
     var tokenWithDuration = jwt.sign({ user: user }, configuration.app.secretKey, { expiresIn: parseInt(configuration.app.tokenDuration) });
     res.json({token: tokenWithDuration});
 });
@@ -19,10 +22,10 @@ router.put('/', function(req, res, next){
     var decoded = '';
     try{
         decoded = jwt.verify(req.get('token'), configuration.app.secretKey);
-        console.log(decoded);
+        logger.debug("decodificando el token: %s", decoded);
         res.json({token: decoded});
     } catch(err) {
-        console.log('error: ' + err);
+        logger.warn('error: %s', err);
         res.json({error: err});
     }
 });
@@ -33,7 +36,3 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
-// module.exports = function(container) {
-//     console.log("-----------");
-//     return router;
-// }

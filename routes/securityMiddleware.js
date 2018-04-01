@@ -1,13 +1,15 @@
 var jwt = require('jsonwebtoken');
 var configuration = require('../configuration');
 var redisClient = require('../modules/redisModule');
+var logFramework = require('../logFramework');
+var logger = logFramework.getLogger("default");
 
 const securityMiddleware = function (req, res, next) {
-  console.log('PATH: ' + req.originalUrl);
+  logger.debug('Requested path: %s', req.originalUrl);
   tokenProvided = req.get('token');
-  console.log("tokenProvided : " + tokenProvided);
+  logger.debug("tokenProvided : %s",tokenProvided);
   if(tokenProvided == null || tokenProvided == ""){
-    console.log('Token es nullo o vacio');
+    logger.warn('Token es nullo o vacio');
     res.redirect('/');
   }
   // redisClient.getClient().set('SECURITY_' + tokenProvided, 'valid', function(err, reply) {
@@ -21,12 +23,11 @@ const securityMiddleware = function (req, res, next) {
       var decodedToken = '';
       try{
         decodedToken = jwt.verify(tokenProvided, configuration.app.secretKey);
-        console.log(decodedToken);
+        logger.debug("token verificado: %s", decodedToken);
         res.json({token: decodedToken});
-        console.log("--generating jwt token: " + decodedToken);
         next();
       } catch(err) {
-          console.log('error: ' + err);
+          logger.warn(err);
           res.redirect('/');
       }
       

@@ -20,7 +20,7 @@ var securityMiddleware = require('./routes/securityMiddleware');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-app.set('logFramework', logFramework);
+//app.set('logFramework', logFramework);
 //app.set('configuration', configuration);
 
 //app.use(morgan('dev'));
