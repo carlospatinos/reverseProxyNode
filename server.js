@@ -19,8 +19,8 @@ var moduleSecurity = require('./routes/security')(app);
 //var indexRouter = moduleIndex.router;
 var gatewayProxy =  require('./routes/gatewayProxy')(app);
 var healthCheckRouter = require('./routes/healthcheck')(app);
-var securityMiddleware = require('./routes/securityMiddleware');
-
+var securityMiddleware = require('./routes/securityMiddleware')(app);
+console.log(securityMiddleware);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
