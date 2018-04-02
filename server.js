@@ -4,12 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var nocache = require('nocache');
+var redis = require('redis');
 var app = express();
 
 var configuration = require('./configuration');
 app.set('configuration', configuration);
 var logFramework = require('./logFramework');
 app.set('logFramework', logFramework);
+app.set('redis', redis);
 var redisClient = require('./modules/redisModule')(app);
 console.log(redisClient);
 app.set('redisClient', redisClient);

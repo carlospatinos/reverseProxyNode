@@ -7,7 +7,7 @@ let should = chai.should();
 
 var redisMock = require("redis-mock");
 let app = require('../server');
-var redisClient = require('../modules/redisModule')(app);
+app.set('redis', redisMock)
 
 
 chai.use(chaiHttp);
@@ -30,7 +30,6 @@ describe('Health', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('statusConnectionRedis');
                     res.body.should.have.property('statusConnectionBack');
-                    redisClient.getClient().quit();
                 done();
                 });
         });
