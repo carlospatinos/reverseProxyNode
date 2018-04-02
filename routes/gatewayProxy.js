@@ -2,8 +2,8 @@ var proxyMiddleware = require('http-proxy-middleware');
 var jwt = require('jsonwebtoken');
 
 module.exports = function(app){
-    var configuration = require('../configuration');
-    var redisClient = require('../modules/redisModule');
+    var configuration = app.get('configuration');
+    var redisClient = app.get('redisClient');
 
     function logProvider(provider) {
         var logger = new (require('winston').Logger)();

@@ -7,7 +7,7 @@ let should = chai.should();
 
 var redisMock = require("redis-mock");
 let app = require('../server');
-var redisClient = require('../modules/redisModule');
+var redisClient = require('../modules/redisModule')(app);
 
 
 chai.use(chaiHttp);

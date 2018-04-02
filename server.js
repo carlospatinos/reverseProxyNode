@@ -10,7 +10,8 @@ var configuration = require('./configuration');
 app.set('configuration', configuration);
 var logFramework = require('./logFramework');
 app.set('logFramework', logFramework);
-var redisClient = require('./modules/redisModule');
+var redisClient = require('./modules/redisModule')(app);
+console.log(redisClient);
 app.set('redisClient', redisClient);
 var moduleIndex = require('./routes/index')(app);
 
@@ -20,7 +21,6 @@ var moduleSecurity = require('./routes/security')(app);
 var gatewayProxy =  require('./routes/gatewayProxy')(app);
 var healthCheckRouter = require('./routes/healthcheck')(app);
 var securityMiddleware = require('./routes/securityMiddleware')(app);
-console.log(securityMiddleware);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function (app){
   var configuration = app.get('configuration');
-  var redisClient = require('../modules/redisModule');
+  var redisClient = app.get('redisClient');
   var logFramework = app.get('logFramework');
   var logger = logFramework.getLogger("default");
 
@@ -11,12 +11,13 @@ module.exports = function (app){
     logger.debug('Path requerido: [%s] con token: [%s]', req.originalUrl, tokenProvided );
     if(tokenProvided == null || tokenProvided == ""){
       logger.warn('Token es nullo o vacio');
-      res.redirect('/');
-      return;
+      //res.redirect('/');
+      //return;
     }
     // redisClient.getClient().set('SECURITY_' + tokenProvided, 'valid', function(err, reply) {
     //   logger.debug("persistido");
     // });
+    
     redisClient.getClient().get('SECURITY_' + tokenProvided, function(err, reply) {
       // reply is null when the key is missing
       if(err){

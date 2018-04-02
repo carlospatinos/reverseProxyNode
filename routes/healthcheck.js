@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   var logFramework = app.get('logFramework');
   var configuration = app.get('configuration');
-  var redisClient = require('../modules/redisModule');
+  var redisClient = app.get('redisClient');
 
   var logger = logFramework.getLogger("default");
   var healthResponse = {};

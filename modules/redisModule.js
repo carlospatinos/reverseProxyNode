@@ -24,19 +24,38 @@ const options = {
     }
 };
 
-module.exports = {
-    getClient: () => {
-        if (client == null) {
-            client = redis.createClient(options);
+// module.exports = {
+//     getClient: () => {
+//         if (client == null) {
+//             client = redis.createClient(options);
 
-            client.on('connect', function() {
-                logger.info('Conexion a redis establecida');
-            });
+//             client.on('connect', function() {
+//                 logger.info('Conexion a redis establecida');
+//             });
             
-            client.on("error", function (err) {
-                logger.error("Error " + err);
-            });
+//             client.on("error", function (err) {
+//                 logger.error("Error " + err);
+//             });
+//         }
+//         return client;
+//     }
+// };
+
+module.exports = function (app){
+    return {
+        getClient: () => {
+            if (client == null) {
+                client = redis.createClient(options);
+
+                client.on('connect', function() {
+                    logger.info('Conexion a redis establecida');
+                });
+                
+                client.on("error", function (err) {
+                    logger.error("Error " + err);
+                });
+            }
+            return client;
         }
-        return client;
     }
 };
