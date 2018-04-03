@@ -2,6 +2,7 @@ app:
   port: 8100
   secretKey: 'mySuperSecret'
   tokenDuration: 20000
+applicationKey: 111
 log:
   configFile: config/log4js.json
 reverseProxy:

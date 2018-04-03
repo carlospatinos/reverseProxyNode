@@ -8,33 +8,48 @@ module.exports = function(app){
     var configuration = app.get('configuration');
     var logFramework = app.get('logFramework');
     var logger = logFramework.getLogger("default");
+    var redisClient = app.get('redisClient');
+
+    function isValid(value){
+        return(value != null && value != "");
+    };
     
     /* GET home page. */
     router.post('/', function(req, res, next) {
         // TODO: validar la information contra redis
-        var user = req.get('user');
-        var pass = req.get('pass');
-        logger.debug('Generando token para usuario: ' + user);
-        var tokenWithDuration = jwt.sign({ user: user }, configuration.app.secretKey, { expiresIn: parseInt(configuration.app.tokenDuration) });
-        res.json({token: tokenWithDuration});
-    });
-    
-    // TODO: delete
-    router.put('/', function(req, res, next){
-        var decoded = '';
-        try{
-            decoded = jwt.verify(req.get('token'), configuration.app.secretKey);
-            logger.debug("decodificando el token: %s", decoded);
-            res.json({token: decoded});
-        } catch(err) {
-            logger.warn('error: %s', err);
-            res.json({error: err});
+        var applicationKey = req.get('applicationKey');
+        var applicationPassword = req.get('applicationPassword');
+        logger.debug('Generando token para usuario: ' + applicationKey + req.headers);
+        if(!isValid(applicationKey) || !isValid(applicationPassword)){
+            logger.warn('applicationKey [' + applicationKey + '] o applicationPassword [' + applicationPassword + '] es nullo o vacio');
+            res.redirect('/');
+            return;
         }
-    });
-    
-    // TODO: delete
-    router.get('/', function(req, res, next) {
-        res.json({token: 'tokenWithDuration'});
+        
+        redisClient.getClient().get('APP_' + configuration.applicationKey, function(err, reply) {
+            if(err){
+                logger.warn('No se encontro el id de la aplicacion %s', configuration.applicationKey);
+                res.redirect('/');
+                return;
+            } else {
+                var duration = parseInt(configuration.app.tokenDuration);
+                var payload = JSON.parse(reply);
+                var tokenWithDuration = jwt.sign(payload, configuration.app.secretKey, { expiresIn: duration });
+
+                // TODO: securityContent
+                var securityContent = JSON.stringify({"token": tokenWithDuration, "applicationToken":"ABCD", "applicationKey":"key","lastUse":1404359477253, "clientHostName":"local", "nombre": "Juan", "app": "Perez" });
+                redisClient.getClient().set('SECURITY_' + tokenWithDuration, securityContent, function(err, reply) {
+                    if(err){
+                        //TODO: RETRY?
+                        logger.warn('No se persistio la informacion de SECURITY_%s', tokenWithDuration);
+                    } else {
+                        res.json({token: tokenWithDuration});
+                    }
+                });
+            }
+
+        });
+        
     });
 
     return router;

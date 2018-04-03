@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+var HTTPErrors = require('http-custom-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -52,7 +53,6 @@ app.use(nocache())
 
 app.use('/', moduleIndex);
 app.use('/security', moduleSecurity);
-app.use('/cdn', express.static(path.join(__dirname, 'cdn')));
 
 app.use('/health', healthCheckRouter);
 
