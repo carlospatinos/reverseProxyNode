@@ -7,6 +7,7 @@ module.exports = function (app){
   var logger = logFramework.getLogger("default");
 
   const securityMiddleware = function (req, res, next) {
+    
     tokenProvided = req.get('token');
     logger.debug('Path requerido: [%s] con token: [%s]', req.originalUrl, tokenProvided );
     if(tokenProvided == null || tokenProvided == ""){
@@ -15,6 +16,14 @@ module.exports = function (app){
       res.send('Token invalido');
       return;
     }
+    // TODO: Verificar si esto es necesario.
+    // applicationKey = req.get('applicationKey');
+    // if(applicationKey == null || applicationKey == ""){
+    //   logger.warn('applicationKey es nullo o vacio');
+    //   res.status(401);
+    //   res.send('applicationKey invalido');
+    //   return;
+    // }
 
     redisClient.getClient().get('SECURITY_' + tokenProvided, function(err, reply) {
       if(err){
@@ -26,11 +35,21 @@ module.exports = function (app){
       } else {
         var decodedToken = '';
         try{
+          var duration = parseInt(configuration.app.tokenDuration);
           decodedToken = jwt.verify(tokenProvided, configuration.app.secretKey);
           // TODO: remover esta linea de log
           logger.debug("token verificado: %s", JSON.stringify(decodedToken));
-          res.header('token',decodedToken);
-          next();
+          // TODO: quien nos provee el applicationId? Applicacion? para persistirlo
+          var securityContent = JSON.stringify({"token": decodedToken, "applicationKey": decodedToken.applicationKey, "lastUse": Date.now()});
+          redisClient.getClient().set('SECURITY_' + decodedToken, securityContent, 'EX', duration, function(err, reply) {
+            if(err){
+                //TODO: RETRY?
+                logger.warn('No se actualizo la duracion del token %s', decodedToken);
+            } 
+            res.header('token',decodedToken);
+            next();
+          });
+          
         } catch(err) {
             logger.warn(err);
             res.status(401);

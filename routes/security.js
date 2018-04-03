@@ -19,7 +19,7 @@ module.exports = function(app){
         // TODO: validar la information contra redis
         var applicationKey = req.get('applicationKey');
         var applicationPassword = req.get('applicationPassword');
-        logger.debug('Generando token para usuario: ' + applicationKey + req.headers);
+        logger.debug('Generando token para usuario: ' + applicationKey);
         if(!isValid(applicationKey) || !isValid(applicationPassword)){
             logger.warn('applicationKey [' + applicationKey + '] o applicationPassword [' + applicationPassword + '] es nullo o vacio');
             res.redirect('/');
@@ -34,11 +34,13 @@ module.exports = function(app){
             } else {
                 var duration = parseInt(configuration.app.tokenDuration);
                 var payload = JSON.parse(reply);
-                var tokenWithDuration = jwt.sign(payload, configuration.app.secretKey, { expiresIn: duration });
+                // TODO: Token does not expire. Eviction time is defined in Redis
+                var tokenWithDuration = jwt.sign(payload, configuration.app.secretKey);
+                //var tokenWithDuration = jwt.sign(payload, configuration.app.secretKey, { expiresIn: duration });
 
                 // TODO: securityContent
-                var securityContent = JSON.stringify({"token": tokenWithDuration, "applicationToken":"ABCD", "applicationKey":"key","lastUse":1404359477253, "clientHostName":"local", "nombre": "Juan", "app": "Perez" });
-                redisClient.getClient().set('SECURITY_' + tokenWithDuration, securityContent, function(err, reply) {
+                var securityContent = JSON.stringify({"token": tokenWithDuration, "applicationKey": applicationKey, "lastUse": Date.now()});
+                redisClient.getClient().set('SECURITY_' + tokenWithDuration, securityContent, 'EX', duration, function(err, reply) {
                     if(err){
                         //TODO: RETRY?
                         logger.warn('No se persistio la informacion de SECURITY_%s', tokenWithDuration);
