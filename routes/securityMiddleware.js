@@ -11,29 +11,30 @@ module.exports = function (app){
     logger.debug('Path requerido: [%s] con token: [%s]', req.originalUrl, tokenProvided );
     if(tokenProvided == null || tokenProvided == ""){
       logger.warn('Token es nullo o vacio');
-      //res.redirect('/');
-      //return;
+      res.status(401);
+      res.send('Token invalido');
+      return;
     }
-    // redisClient.getClient().set('SECURITY_' + tokenProvided, 'valid', function(err, reply) {
-    //   logger.debug("persistido");
-    // });
-    
+
     redisClient.getClient().get('SECURITY_' + tokenProvided, function(err, reply) {
-      // reply is null when the key is missing
       if(err){
         logger.warn('No se encontro el id de la aplicacion %s', tokenProvided);
-        res.redirect('/');
+        //res.redirect('/');
+        res.status(401);
+        res.send('Token invalido');
         return;
       } else {
         var decodedToken = '';
         try{
           decodedToken = jwt.verify(tokenProvided, configuration.app.secretKey);
-          logger.debug("token verificado: %s", decodedToken);
+          // TODO: remover esta linea de log
+          logger.debug("token verificado: %s", JSON.stringify(decodedToken));
           res.header('token',decodedToken);
           next();
         } catch(err) {
             logger.warn(err);
-            res.redirect('/');
+            res.status(401);
+            res.send('Token invalido');
             return;
         }
         

@@ -54,7 +54,7 @@ app.use(nocache())
 app.use('/', moduleIndex);
 app.use('/security', moduleSecurity);
 
-app.use('/health', healthCheckRouter);
+app.use('/health', securityMiddleware, healthCheckRouter);
 
 app.use('/api', securityMiddleware, gatewayProxy);
 app.use('/app', securityMiddleware, gatewayProxy);
