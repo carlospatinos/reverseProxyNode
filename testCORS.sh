@@ -1,0 +1,1 @@
+curl -X POST -H "applicationKey: 111" -H "applicationPassword: pass" -H "Content-Type: application/x-www-form-urlencoded" -H "Origin: http://example.com" --verbose http://localhost:8081/security

@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var nocache = require('nocache');
 var redis = require('redis');
+var cors = require('cors');
 var app = express();
 
 var configuration = require('./configuration');
@@ -48,8 +49,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(nocache())
+app.use(nocache());
+app.use(cors());
 
 app.use('/', moduleIndex);
 app.use('/security', moduleSecurity);
